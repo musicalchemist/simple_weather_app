@@ -42,8 +42,8 @@ def main():
                 st.markdown(f"<div style='background-color: #f5f5f5; padding: 10px; border-radius: 10px; text-align: center;'>"
                             f"<h4 style='color: black;'>Sunrise/Sunset</h4>"
                             f"<h3 style='color: black; font-size: medium; word-wrap: break-word;'>"
-                            f"{Weather.convert_unix_to_localtime(weather_data['sys']['sunrise'], weather_data['timezone'])}/"
-                            f"{Weather.convert_unix_to_localtime(weather_data['sys']['sunset'], weather_data['timezone'])}"
+                            f"{weather.convert_unix_to_localtime(weather_data['sys']['sunrise'], weather_data['timezone'])}/"
+                            f"{weather.convert_unix_to_localtime(weather_data['sys']['sunset'], weather_data['timezone'])}"
                             f"</h3></div>", unsafe_allow_html=True)
 
             forecast_data = weather.fetch_forecast(city_name)

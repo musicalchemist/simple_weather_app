@@ -17,6 +17,7 @@ Simple Weather App is a Python-based web application built with Streamlit. It fe
 - Python 3.8 or later
 - Anaconda or Miniconda
 - Streamlit
+- Plotly
 - OpenWeatherMap API key
 - Google Maps API key
 
@@ -63,6 +64,7 @@ Simple Weather App is a Python-based web application built with Streamlit. It fe
 
 - Python
 - Streamlit
+- Plotly
 - OpenWeatherMap API
 - Google Maps Geocoding API
 - Matplotlib

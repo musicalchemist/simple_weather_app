@@ -14,7 +14,7 @@ Simple Weather App is a Python-based web application built with Streamlit. It fe
 
 ### Prerequisites
 
-- Python 3.8 or later
+- Python 3.10 or later
 - Anaconda or Miniconda
 - Streamlit
 - Plotly
@@ -32,8 +32,8 @@ Simple Weather App is a Python-based web application built with Streamlit. It fe
 2. Create and activate a new conda environment:
 
    ```
-   conda create -n weather_app python=3.8
-   conda activate weather_app
+   conda create -n simple_weather_app python=3.10
+   conda activate simple_weather_app
    ```
 
 3. Install required dependencies:

@@ -3,19 +3,39 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 from weather import Weather
+from session import SessionState
 from visuals import plot_forecast
 
 weather = Weather()
 
-def main():
-    st.title("Local Weather App")  # Add title to the page
-    city_name = st.text_input("Please enter the city and state name: ")
-    if st.button('Get Weather'):
-        st.header(f"Weather Information for {city_name}")
+@st.cache_data
+def get_search_history():
+    return []
 
-        weather_data = weather.fetch_weather(city_name)
+def main():
+    # Get the search history list. This will be preserved between runs thanks to st.cache
+    search_history = get_search_history()
+
+    # Create an instance of the SessionState
+    session_state = SessionState()
+
+    st.title("Local Weather App")  # Add title to the page
+    city_state = st.text_input("Please enter the city and state name: ")
+
+    if st.button('Get Weather'):
+        # If this is not the first search, add the current search term to the session state
+        if city_state:  # assuming an empty city_state shouldn't be added
+            search_history.append(city_state)
+
+        # # Store the current search term in the session state
+        # session_state.last_search = city_state
+
+        # Now the 'Get Weather' button was pressed, do the search and display the weather
+        st.header(f"Weather Information for {city_state}")
+
+        weather_data = weather.fetch_weather(city_state)
         if weather_data:
-            st.header(f"Current Weather in {city_name}:")
+            st.header(f"Current Weather in {city_state}:")
 
             # Card-like layout for weather data
             col1, col2, col3 = st.columns([1,1,1])
@@ -47,7 +67,7 @@ def main():
                             f"{weather.convert_unix_to_localtime(weather_data['sys']['sunset'], weather_data['timezone'])}"
                             f"</h3></div>", unsafe_allow_html=True)
 
-            forecast_data = weather.fetch_forecast(city_name)
+            forecast_data = weather.fetch_forecast(city_state)
             if forecast_data:
                 st.subheader("3-Day Forecast:")
                 # Parse date string to only include date (not time)
@@ -70,34 +90,16 @@ def main():
                 st.table(forecast_df)
 
                 # Plotting forecast data
-                # fig, ax1 = plt.subplots()
-                # ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-
-                # color = 'tab:blue'
-                # ax1.set_xlabel('Date')
-                # ax1.set_ylabel('Temperature (°C)', color=color)
-                # ax1.plot(forecast_df['Date'], forecast_df['Temperature (°C)'], 'o-', color=color)
-                # ax1.tick_params(axis='y', labelcolor=color)
-
-                # color = 'tab:green'
-                # ax2.set_ylabel('Humidity (%)', color=color) 
-                # ax2.plot(forecast_df['Date'], forecast_df['Humidity (%)'], 'o-', color=color)
-                # ax2.tick_params(axis='y', labelcolor=color)
-
-                # # Set x-ticks manually
-                # ax1.set_xticks(forecast_df['Date'])
-
-                # # Rotation of X-axis labels
-                # for label in ax1.get_xticklabels():
-                #     label.set_rotation(45)
-
-                # fig.tight_layout()  
-                # st.pyplot(fig)
                 plot_forecast(forecast_df, st)
 
-            # Log search history...
         else:
             st.error("Error fetching weather information.")
+
+    st.sidebar.header("Search History")
+    for search in search_history:
+        if st.sidebar.button(search):
+            # This will re-enter the search term into the text box, triggering a new search
+            city_state = search
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv, find_dotenv
 import os
+from datetime import datetime
 
 class Weather:
     def __init__(self):
@@ -28,3 +29,12 @@ class Weather:
             return [forecast_data['list'][i] for i in range(0, days*8, 8)]
         else:
             return None
+        
+    @staticmethod
+    def convert_unix_to_time(unix_time):
+        return datetime.utcfromtimestamp(unix_time).strftime('%H:%M:%S')
+    
+    @staticmethod
+    def convert_unix_to_localtime(unix_time, timezone):
+        local_time = datetime.fromtimestamp(unix_time + timezone)
+        return local_time.strftime('%H:%M:%S')
